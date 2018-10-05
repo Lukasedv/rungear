@@ -180,10 +180,9 @@ const Button = ({ onClick, className, children }) =>
 const Table = ({ clothes, temp }) =>
   <div className="table">
     {clothes.filter(function(item) {
-      return item.tempmax > (temp-273.15);}).map(item =>
-      <div className="table-row">
+      return (temp-273.15) <= item.tempmax && (temp-273.15) >= item.tempmin;}).map(item =>
+      <div key={item.name} className="table-row">
         <span style={{ width: '30%' }}>{item.name}</span>
-
       </div>
     )}
   </div>
