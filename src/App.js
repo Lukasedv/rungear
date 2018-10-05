@@ -102,7 +102,7 @@ class App extends Component {
         }
       )
     } else {
-      console.log("Eroor");
+      console.log("Geolocation Error");
     }
   }
 
