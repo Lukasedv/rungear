@@ -2,15 +2,11 @@ import React, { Component } from 'react'
 import MapComponent from './MapComponent'
 import { } from './App.css'
 import '@zendeskgarden/react-ranges/dist/styles.css';
-
 import { ThemeProvider } from '@zendeskgarden/react-theming';
 import { RangeField, Label, Hint, Range, Message } from '@zendeskgarden/react-ranges';
 
 const APPID = `${process.env.REACT_APP_WEATHER_API_KEY}`;
 const PATH_BASE = 'https://api.openweathermap.org/data/2.5/weather';
-
-console.log(APPID);
-
 
 const clothes = [
   {
@@ -56,19 +52,19 @@ class App extends Component {
         lat: 38.036273,
         lng: 23.787634
       },
-      isMarkerShown: false,
+      isMarkerShown: true,
       weather: [],
       clothes: clothes,
       tempadjust: 0,
     }
-    this.getGeoLocation()
-    //this.getWeather()
   }
 
 
+  componentWillMount() {
+    this.getLocationAndWeather()
+  }
 
   componentDidMount() {
-    this.delayedShowMarker()
 
   }
 
@@ -77,7 +73,7 @@ class App extends Component {
     setTimeout(() => {
       //this.getGeoLocation()
       this.setState({ isMarkerShown: true })
-    }, 5000)
+    }, 1000)
   }
 
   handleMarkerClick = () => {
@@ -119,6 +115,11 @@ class App extends Component {
       .then(response => response.json())
       .then(data => this.setState({ weather: data }))
       .catch(error => error);
+      console.log(this.weather);
+  }
+
+  getLocationAndWeather = () => {
+    this.getGeoLocation(() => this.getWeather())
   }
 
   render() {
@@ -135,6 +136,7 @@ class App extends Component {
           />
         </div>
         <div className="infopanel">
+          <span>{weather.name}</span><br />
           <span>Lat:{currentLatLng.lat}</span>
           <span>Lat:{currentLatLng.lng}</span><br />
           <span>Temp:{weather.temp - 273.15}</span><br />
@@ -208,6 +210,8 @@ const Table = ({ clothes, temp }) =>
       </div>
     )}
   </div>
+
+
 
 export default App;
 /*
