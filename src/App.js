@@ -63,16 +63,18 @@ class App extends Component {
       },
       isMarkerShown: true,
       weather: [],
+      weatherAll: [],
       clothes: clothes,
       tempadjust: 0,
       isCelcius: true,
-      city: null
     }
+    this.getGeoLocation();
+    this.getWeather();
   }
 
 
   componentWillMount() {
-    this.getLocationAndWeather()
+    
   }
 
   componentDidMount() {
@@ -109,6 +111,7 @@ class App extends Component {
     } else {
       console.log("Geolocation Error");
     }
+    console.log('Geolocating')
   }
 
   resetGeoLocation = () => {
@@ -124,14 +127,11 @@ class App extends Component {
   getWeather = () => {
     fetch(`${PATH_BASE}?lat=${this.state.currentLatLng.lat}&lon=${this.state.currentLatLng.lng}&APPID=${APPID}`)
       .then(response => response.json())
-      .then(data => this.setState({ weather: data.main }))
+      .then(data => this.setState({ weather: data }))
       .catch(error => error);
-    console.log(this.weather);
+      console.log('Fetching weather')
   }
 
-  getLocationAndWeather = () => {
-    this.getGeoLocation(() => this.getWeather())
-  }
 
   useCelcius = () => {
   }
@@ -141,7 +141,9 @@ class App extends Component {
     isCelcius ? 'Celcius' : 'Fahrenheit';
 
   render() {
-    const { currentLatLng, weather, isCelcius, city } = this.state;
+    console.log('Rendering');
+    const { currentLatLng, weather, isCelcius } = this.state;
+    
     return (
       <ThemeProvider>
         <div>
@@ -155,7 +157,7 @@ class App extends Component {
           </div>
           <div className="infopanel">
 
-            <h1>{city} {weather.temp - 273.15}º<b>{isCelcius ? ('C') : ('F')}</b></h1>
+            <h1>{weather.name} {weather.temp - 273.15}º<b>{isCelcius ? ('C') : ('F')}</b></h1>
             <Toggle checked={this.state.isCelcius} onChange={event => this.setState({ isCelcius: event.target.checked })}>
   <Label>Units</Label>
   <Message validation={this.getValidationType(this.state.isCelcius)}>
