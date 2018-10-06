@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    
     <meta charset="utf-8">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -37,4 +38,19 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+
+  <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyC2mhiIzta_ioLT7DTic_L1sgCQxbPmmrg",
+    authDomain: "runwear-f7045.firebaseapp.com",
+    databaseURL: "https://runwear-f7045.firebaseio.com",
+    projectId: "runwear-f7045",
+    storageBucket: "",
+    messagingSenderId: "1002038436071"
+  };
+  firebase.initializeApp(config);
+</script>
+
 </html>
