@@ -1,9 +1,17 @@
 import React, { Component } from 'react'
 import MapComponent from './MapComponent'
 import { } from './App.css'
+import '@zendeskgarden/react-ranges/dist/styles.css';
 
-const APPID = '424f7cf176d78fb36b19fb14db47026e';
+import { ThemeProvider } from '@zendeskgarden/react-theming';
+import { RangeField, Label, Hint, Range, Message } from '@zendeskgarden/react-ranges';
+
+const APPID = `${process.env.REACT_APP_WEATHER_API_KEY}`;
 const PATH_BASE = 'https://api.openweathermap.org/data/2.5/weather';
+//const GOOGLEAPI = 'AIzaSyCKINbjUrWbz8PEOAlETVzaeZkfFjww-vY';
+
+console.log(APPID);
+
 
 const clothes = [
   {
@@ -19,7 +27,8 @@ const clothes = [
   {
     name: 'short sleeve',
     tempmax: 20,
-    tempmin: 13
+    tempmin: 13,
+    image: '/images/Blue_Tshirt.jpg'
   },
   {
     name: 'long sleeve',
@@ -29,25 +38,16 @@ const clothes = [
   {
     name: 'shorts',
     tempmax: 100,
-    tempmin: 10
+    tempmin: 8
   },
   {
     name: 'tights',
-    tempmax: 10,
+    tempmax: 9,
     tempmin: -100
   }
 ];
 
 
-function isBetween(temp) {
-  return function (item) {
-    if ((temp-273.15) < item.maxtemp) {
-      if ((temp-273.15) > item.mintemp) {
-        return item;
-    }
-  }
-}
-}
 
 class App extends Component {
   constructor(props) {
@@ -58,10 +58,9 @@ class App extends Component {
         lng: 23.787634
       },
       isMarkerShown: false,
-      temp: null,
-      wind: null,
       weather: [],
-      clothes: clothes
+      clothes: clothes,
+      tempadjust: 0,
     }
     this.getGeoLocation()
     //this.getWeather()
@@ -119,13 +118,14 @@ class App extends Component {
   getWeather = () => {
     fetch(`${PATH_BASE}?lat=${this.state.currentLatLng.lat}&lon=${this.state.currentLatLng.lng}&APPID=${APPID}`)
       .then(response => response.json())
-      .then(data => this.setState({ weather: data.main }))
+      .then(data => this.setState({ weather: data }))
       .catch(error => error);
   }
 
   render() {
     const { currentLatLng, weather } = this.state;
     return (
+      <ThemeProvider>
       <div>
         <div>
           <MapComponent
@@ -157,13 +157,35 @@ class App extends Component {
           >
             Get Weather
       </Button>
-        </div>
-        <div>
-          <Table
-            temp={weather.temp}
+
+
+  <RangeField>
+    <Label>Adjustment</Label>
+    <Hint>
+    Move range to view changes. [value="
+    {this.state.tempadjust}
+    "]
+  </Hint>
+    <Range
+      min={-5}
+      max={5}
+      step={1}
+      value={this.state.tempadjust}
+      onChange={event => this.setState({ tempadjust: event.target.value })}
+    />
+    <Message>Example Messaging</Message>
+  </RangeField>
+
+
+      <Table
+            temp={weather.temp+this.state.tempadjust}
             clothes={clothes} />
         </div>
+
+
+
       </div>
+      </ThemeProvider>
     );
   }
 }
@@ -179,6 +201,7 @@ const Button = ({ onClick, className, children }) =>
 
 const Table = ({ clothes, temp }) =>
   <div className="table">
+  {temp}
     {clothes.filter(function(item) {
       return (temp-273.15) <= item.tempmax && (temp-273.15) >= item.tempmin;}).map(item =>
       <div key={item.name} className="table-row">
