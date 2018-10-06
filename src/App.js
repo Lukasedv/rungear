@@ -8,7 +8,6 @@ import { RangeField, Label, Hint, Range, Message } from '@zendeskgarden/react-ra
 
 const APPID = `${process.env.REACT_APP_WEATHER_API_KEY}`;
 const PATH_BASE = 'https://api.openweathermap.org/data/2.5/weather';
-//const GOOGLEAPI = 'AIzaSyCKINbjUrWbz8PEOAlETVzaeZkfFjww-vY';
 
 console.log(APPID);
 
