@@ -65,7 +65,8 @@ class App extends Component {
       weather: [],
       clothes: clothes,
       tempadjust: 0,
-      isCelcius: true
+      isCelcius: true,
+      city: null
     }
   }
 
@@ -123,7 +124,7 @@ class App extends Component {
   getWeather = () => {
     fetch(`${PATH_BASE}?lat=${this.state.currentLatLng.lat}&lon=${this.state.currentLatLng.lng}&APPID=${APPID}`)
       .then(response => response.json())
-      .then(data => this.setState({ weather: data }))
+      .then(data => this.setState({ weather: data.main }))
       .catch(error => error);
     console.log(this.weather);
   }
@@ -135,12 +136,12 @@ class App extends Component {
   useCelcius = () => {
   }
 
-  getValidationType = isChecked => (isChecked ? 'success' : 'success');
-  getValidationMessage = isChecked =>
-    isChecked ? 'Celcius' : 'Fahrenheit';
+  getValidationType = isCelcius => (isCelcius ? 'success' : 'success');
+  getValidationMessage = isCelcius =>
+    isCelcius ? 'Celcius' : 'Fahrenheit';
 
   render() {
-    const { currentLatLng, weather } = this.state;
+    const { currentLatLng, weather, isCelcius, city } = this.state;
     return (
       <ThemeProvider>
         <div>
@@ -154,7 +155,7 @@ class App extends Component {
           </div>
           <div className="infopanel">
 
-            <h1>Helsinki {weather.temp - 273.15}ºC</h1>
+            <h1>{city} {weather.temp - 273.15}º<b>{isCelcius ? ('C') : ('F')}</b></h1>
             <Toggle checked={this.state.isCelcius} onChange={event => this.setState({ isCelcius: event.target.checked })}>
   <Label>Units</Label>
   <Message validation={this.getValidationType(this.state.isCelcius)}>
@@ -196,7 +197,6 @@ class App extends Component {
                 value={this.state.tempadjust}
                 onChange={event => this.setState({ tempadjust: event.target.value })}
               />
-              <Message>Example Messaging</Message>
             </RangeField>
 
 
