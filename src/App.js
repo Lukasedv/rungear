@@ -1,9 +1,18 @@
 import React, { Component } from 'react'
 import MapComponent from './MapComponent'
 import { } from './App.css'
+
 import '@zendeskgarden/react-ranges/dist/styles.css';
+import '@zendeskgarden/react-toggles/dist/styles.css';
+
 import { ThemeProvider } from '@zendeskgarden/react-theming';
-import { RangeField, Label, Hint, Range, Message } from '@zendeskgarden/react-ranges';
+import { RangeField, Hint, Range, Message } from '@zendeskgarden/react-ranges';
+import { Toggle, Label } from '@zendeskgarden/react-toggles';
+
+import shorts from './icons/shorts.svg';
+
+
+
 
 const APPID = `${process.env.REACT_APP_WEATHER_API_KEY}`;
 const PATH_BASE = 'https://api.openweathermap.org/data/2.5/weather';
@@ -23,7 +32,7 @@ const clothes = [
     name: 'short sleeve',
     tempmax: 20,
     tempmin: 13,
-    image: '/images/Blue_Tshirt.jpg'
+    image: { shorts }
   },
   {
     name: 'long sleeve',
@@ -56,6 +65,7 @@ class App extends Component {
       weather: [],
       clothes: clothes,
       tempadjust: 0,
+      isCelcius: true
     }
   }
 
@@ -115,77 +125,89 @@ class App extends Component {
       .then(response => response.json())
       .then(data => this.setState({ weather: data }))
       .catch(error => error);
-      console.log(this.weather);
+    console.log(this.weather);
   }
 
   getLocationAndWeather = () => {
     this.getGeoLocation(() => this.getWeather())
   }
 
+  useCelcius = () => {
+  }
+
+  getValidationType = isChecked => (isChecked ? 'success' : 'success');
+  getValidationMessage = isChecked =>
+    isChecked ? 'Celcius' : 'Fahrenheit';
+
   render() {
     const { currentLatLng, weather } = this.state;
     return (
       <ThemeProvider>
-      <div>
         <div>
-          <MapComponent
-            currentLocation={this.state.currentLatLng}
-            isMarkerShown={this.state.isMarkerShown}
-            onMarkerClick={this.handleMarkerClick}
+          <div>
+            <MapComponent
+              currentLocation={this.state.currentLatLng}
+              isMarkerShown={this.state.isMarkerShown}
+              onMarkerClick={this.handleMarkerClick}
 
-          />
-        </div>
-        <div className="infopanel">
-          <span>{weather.name}</span><br />
-          <span>Lat:{currentLatLng.lat}</span>
-          <span>Lat:{currentLatLng.lng}</span><br />
-          <span>Temp:{weather.temp - 273.15}</span><br />
-          <Button
-            onClick={() => this.getGeoLocation()}
-            className="button-inline"
-          >
-            Update
+            />
+          </div>
+          <div className="infopanel">
+
+            <h1>Helsinki {weather.temp - 273.15}ºC</h1>
+            <Toggle checked={this.state.isCelcius} onChange={event => this.setState({ isCelcius: event.target.checked })}>
+  <Label>Units</Label>
+  <Message validation={this.getValidationType(this.state.isCelcius)}>
+    {this.getValidationMessage(this.state.isCelcius)}
+  </Message>
+</Toggle><br />
+            <span>Lat:{currentLatLng.lat}</span>
+            <span>Lat:{currentLatLng.lng}</span><br />
+            <Button
+              onClick={() => this.getGeoLocation()}
+              className="button-inline"
+            >
+              Update
       </Button>
-          <Button
-            onClick={() => this.resetGeoLocation()}
-            className="button-inline"
-          >
-            Reset
+            <Button
+              onClick={() => this.resetGeoLocation()}
+              className="button-inline"
+            >
+              Reset
       </Button>
-          <Button
-            onClick={() => this.getWeather()}
-            className="button-inline"
-          >
-            Get Weather
+            <Button
+              onClick={() => this.getWeather()}
+              className="button-inline"
+            >
+              Get Weather
       </Button>
 
 
-  <RangeField>
-    <Label>Adjustment</Label>
-    <Hint>
-    Move range to view changes. [value="
+            <RangeField>
+              <Hint>
+                Move range to view changes. [value="
     {this.state.tempadjust}
-    "]
+                "]
   </Hint>
-    <Range
-      min={-5}
-      max={5}
-      step={1}
-      value={this.state.tempadjust}
-      onChange={event => this.setState({ tempadjust: event.target.value })}
-    />
-    <Message>Example Messaging</Message>
-  </RangeField>
+              <Range
+                min={-5}
+                max={5}
+                step={1}
+                value={this.state.tempadjust}
+                onChange={event => this.setState({ tempadjust: event.target.value })}
+              />
+              <Message>Example Messaging</Message>
+            </RangeField>
 
 
-      <Table
-            temp={weather.temp+this.state.tempadjust}
-            clothes={clothes} />
+            <Table
+              temp={weather.temp + this.state.tempadjust}
+              clothes={clothes} />
+          </div>
+
+
+
         </div>
-
-
-
-      </div>
       </ThemeProvider>
     );
   }
@@ -202,11 +224,13 @@ const Button = ({ onClick, className, children }) =>
 
 const Table = ({ clothes, temp }) =>
   <div className="table">
-  {temp}
-    {clothes.filter(function(item) {
-      return (temp-273.15) <= item.tempmax && (temp-273.15) >= item.tempmin;}).map(item =>
+    {temp}
+    {clothes.filter(function (item) {
+      return (temp - 273.15) <= item.tempmax && (temp - 273.15) >= item.tempmin;
+    }).map(item =>
       <div key={item.name} className="table-row">
         <span style={{ width: '30%' }}>{item.name}</span>
+        <img src={item.image} width="50%" />
       </div>
     )}
   </div>
