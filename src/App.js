@@ -67,9 +67,9 @@ class App extends Component {
       clothes: clothes,
       tempadjust: 0,
       isCelcius: true,
+      promiseIsResolved: false
     }
-    this.getGeoLocation();
-    this.getWeather();
+
   }
 
 
@@ -78,7 +78,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-
+    this.getGeoLocation();
   }
 
 
@@ -106,6 +106,7 @@ class App extends Component {
               lng: position.coords.longitude
             }
           }))
+          this.getWeather();
         }
       )
     } else {
@@ -141,6 +142,7 @@ class App extends Component {
     isCelcius ? 'Celcius' : 'Fahrenheit';
 
   render() {
+    //if(!this.state.promiseIsResolved){return null}
     console.log('Rendering');
     const { currentLatLng, weather, isCelcius } = this.state;
     
