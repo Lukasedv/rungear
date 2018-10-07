@@ -129,6 +129,7 @@ class App extends Component {
     fetch(`${PATH_BASE}?lat=${this.state.currentLatLng.lat}&lon=${this.state.currentLatLng.lng}&APPID=${APPID}`)
       .then(response => response.json())
       .then(data => this.setState({ weather: data }))
+      .then(data => this.setState({promiseIsResolved : true}))
       .catch(error => error);
       console.log('Fetching weather')
   }
@@ -142,7 +143,7 @@ class App extends Component {
     isCelcius ? 'Celcius' : 'Fahrenheit';
 
   render() {
-    //if(!this.state.promiseIsResolved){return null}
+    if(!this.state.promiseIsResolved){return null}
     console.log('Rendering');
     const { currentLatLng, weather, isCelcius } = this.state;
     
@@ -159,7 +160,7 @@ class App extends Component {
           </div>
           <div className="infopanel">
 
-            <h1>{weather.name} {weather.temp - 273.15}º<b>{isCelcius ? ('C') : ('F')}</b></h1>
+            <h1>{weather.name} {weather.main.temp - 273.15}º<b>{isCelcius ? ('C') : ('F')}</b></h1>
             <Toggle checked={this.state.isCelcius} onChange={event => this.setState({ isCelcius: event.target.checked })}>
   <Label>Units</Label>
   <Message validation={this.getValidationType(this.state.isCelcius)}>
