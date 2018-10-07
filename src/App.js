@@ -165,8 +165,9 @@ class App extends Component {
           </div>
           <div className="infopanel">
 
-            <h1>{weather.name} {weather.main.temp - 273.15}º<b>{isCelcius ? ('C') : ('F')}</b> {weather.weather[0].description}</h1>
-            <h3>Wind: {weather.wind.speed}m/s</h3>
+            <h1>{weather.name} {weather.main.temp - 273.15}º<b>{isCelcius ? ('C') : ('F')}</b><img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`} /> </h1>
+            <h3>
+            {weather.weather[0].description} Wind: {weather.wind.speed}m/s</h3>
             <Toggle checked={this.state.isCelcius} onChange={event => this.setState({ isCelcius: event.target.checked })}>
               <Label>Units</Label>
               <Message validation={this.getValidationType(this.state.isCelcius)}>
