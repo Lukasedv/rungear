@@ -9,6 +9,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-ga": "^2.5.3",
     "react-geolocated": "^2.4.0",
     "react-geolocation": "^1.0.4",
     "react-google-maps": "^9.4.5",

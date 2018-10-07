@@ -9,7 +9,8 @@ import { ThemeProvider } from '@zendeskgarden/react-theming';
 import { RangeField, Hint, Range, Message } from '@zendeskgarden/react-ranges';
 import { Toggle, Label } from '@zendeskgarden/react-toggles';
 
-import shorts from './icons/shorts.svg';
+import ReactGA from 'react-ga';
+
 
 
 
@@ -32,7 +33,6 @@ const clothes = [
     name: 'short sleeve',
     tempmax: 20,
     tempmin: 13,
-    image: { shorts }
   },
   {
     name: 'long sleeve',
@@ -42,7 +42,7 @@ const clothes = [
   {
     name: 'shorts',
     tempmax: 100,
-    tempmin: 8
+    tempmin: 10
   },
   {
     name: 'tights',
@@ -73,11 +73,12 @@ class App extends Component {
 
 
   componentWillMount() {
-    
+
   }
 
   componentDidMount() {
     this.getGeoLocation();
+    this.initializeReactGA();
   }
 
 
@@ -91,6 +92,11 @@ class App extends Component {
   handleMarkerClick = () => {
     this.setState({ isMarkerShown: false })
     this.delayedShowMarker()
+  }
+
+  initializeReactGA() {
+    ReactGA.initialize('UA-127138556-1');
+    ReactGA.pageview('/main');
   }
 
   getGeoLocation = () => {
@@ -128,9 +134,9 @@ class App extends Component {
     fetch(`${PATH_BASE}?lat=${this.state.currentLatLng.lat}&lon=${this.state.currentLatLng.lng}&APPID=${APPID}`)
       .then(response => response.json())
       .then(data => this.setState({ weather: data }))
-      .then(data => this.setState({promiseIsResolved : true}))
+      .then(data => this.setState({ promiseIsResolved: true }))
       .catch(error => error);
-      console.log('Fetching weather')
+    console.log('Fetching weather')
   }
 
 
@@ -142,10 +148,10 @@ class App extends Component {
     isCelcius ? 'Celcius' : 'Fahrenheit';
 
   render() {
-    if(!this.state.promiseIsResolved){return null}
+    if (!this.state.promiseIsResolved) { return null }
     console.log('Rendering');
     const { currentLatLng, weather, isCelcius } = this.state;
-    
+
     return (
       <ThemeProvider>
         <div>
@@ -162,11 +168,11 @@ class App extends Component {
             <h1>{weather.name} {weather.main.temp - 273.15}º<b>{isCelcius ? ('C') : ('F')}</b> {weather.weather[0].description}</h1>
             <h3>Wind: {weather.wind.speed}m/s</h3>
             <Toggle checked={this.state.isCelcius} onChange={event => this.setState({ isCelcius: event.target.checked })}>
-  <Label>Units</Label>
-  <Message validation={this.getValidationType(this.state.isCelcius)}>
-    {this.getValidationMessage(this.state.isCelcius)}
-  </Message>
-</Toggle><br />
+              <Label>Units</Label>
+              <Message validation={this.getValidationType(this.state.isCelcius)}>
+                {this.getValidationMessage(this.state.isCelcius)}
+              </Message>
+            </Toggle><br />
             <span>Lat:{currentLatLng.lat}</span>
             <span>Lat:{currentLatLng.lng}</span><br />
             <Button
@@ -206,7 +212,7 @@ class App extends Component {
 
 
             <Table
-              temp={weather.temp + this.state.tempadjust}
+              temp={weather.main.temp + this.state.tempadjust}
               clothes={clothes} />
           </div>
 
@@ -235,7 +241,6 @@ const Table = ({ clothes, temp }) =>
     }).map(item =>
       <div key={item.name} className="table-row">
         <span style={{ width: '30%' }}>{item.name}</span>
-        <img src={item.image} width="50%" />
       </div>
     )}
   </div>
