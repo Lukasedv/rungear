@@ -25,7 +25,7 @@ const MapComponent = compose(
       rotateControl: false,
       fullscreenControl: false }}
     center={{ lat: props.currentLocation.lat, lng: props.currentLocation.lng }}
-    defaultZoom={10}
+    defaultZoom={12}
     defaultCenter={{ lat: props.currentLocation.lat, lng: props.currentLocation.lng }}
   >
     {props.isMarkerShown && <Marker position={{ lat: props.currentLocation.lat, lng: props.currentLocation.lng }} onClick={props.onMarkerClick} />}
