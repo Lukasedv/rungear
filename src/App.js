@@ -165,17 +165,19 @@ class App extends Component {
           </div>
           <div className="infopanel">
 
-            <h1>{weather.name} {weather.main.temp.toFixed(2) - 273.15}º<b>{isCelcius ? ('C') : ('F')}</b><img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`} /> </h1>
+            <h1>{weather.name} {(weather.main.temp - 273.15).toFixed(2)}º<b>{isCelcius ? ('C') : ('F')}</b><img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`} /> </h1>
+            <span>Lat:{currentLatLng.lat.toFixed(4)}</span>
+            <span>Lat:{currentLatLng.lng.toFixed(4)}</span><br />
             <h3>
             {weather.weather[0].description} Wind: {weather.wind.speed}m/s</h3>
-            <Toggle checked={this.state.isCelcius} onChange={event => this.setState({ isCelcius: event.target.checked })}>
+            <div className="hidden"><Toggle checked={this.state.isCelcius} onChange={event => this.setState({ isCelcius: event.target.checked })}>
               <Label>Units</Label>
               <Message validation={this.getValidationType(this.state.isCelcius)}>
                 {this.getValidationMessage(this.state.isCelcius)}
               </Message>
             </Toggle><br />
-            <span>Lat:{currentLatLng.lat}</span>
-            <span>Lat:{currentLatLng.lng}</span><br />
+            
+            
             <Button
               onClick={() => this.getGeoLocation()}
               className="button-inline"
@@ -193,8 +195,8 @@ class App extends Component {
               className="button-inline"
             >
               Get Weather
-      </Button>
-
+      </Button></div>
+<div className="hidden">
             <RangeField>
               <Hint>
                 Move range to view changes. [value="
@@ -216,7 +218,7 @@ class App extends Component {
               clothes={clothes} />
           </div>
 
-
+          </div>
 
         </div>
       </ThemeProvider>

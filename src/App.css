@@ -28,3 +28,7 @@
   width: 75%;
   padding: 10px;
 }
+
+.hidden {
+  display: none;
+}
