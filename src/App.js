@@ -15,8 +15,8 @@ import ReactGA from 'react-ga';
 
 
 
-//const APPID = `${process.env.REACT_APP_WEATHER_API_KEY}`;
-const APPID = "d0eae218ba2b947e873e672e62a75ee3"
+const APPID = `${process.env.REACT_APP_WEATHER_API_KEY}`;
+//const APPID = "d0eae218ba2b947e873e672e62a75ee3"
 const PATH_BASE = 'https://api.openweathermap.org/data/2.5/weather';
 
 const clothes = [
