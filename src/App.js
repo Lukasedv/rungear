@@ -16,7 +16,6 @@ import ReactGA from 'react-ga';
 
 
 const APPID = `${process.env.REACT_APP_WEATHER_API_KEY}`;
-//const APPID = "d0eae218ba2b947e873e672e62a75ee3"
 const PATH_BASE = 'https://api.openweathermap.org/data/2.5/weather';
 
 const clothes = [
@@ -166,7 +165,7 @@ class App extends Component {
           </div>
           <div className="infopanel">
 
-            <h1>{weather.name} {weather.main.temp - 273.15}º<b>{isCelcius ? ('C') : ('F')}</b><img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`} /> </h1>
+            <h1>{weather.name} {weather.main.temp.toFixed(2) - 273.15}º<b>{isCelcius ? ('C') : ('F')}</b><img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`} /> </h1>
             <h3>
             {weather.weather[0].description} Wind: {weather.wind.speed}m/s</h3>
             <Toggle checked={this.state.isCelcius} onChange={event => this.setState({ isCelcius: event.target.checked })}>
@@ -195,7 +194,6 @@ class App extends Component {
             >
               Get Weather
       </Button>
-
 
             <RangeField>
               <Hint>
