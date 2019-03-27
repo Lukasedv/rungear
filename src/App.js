@@ -12,8 +12,6 @@ import { Toggle, Label } from '@zendeskgarden/react-toggles';
 import ReactGA from 'react-ga';
 
 
-
-
 const APPID = `${process.env.REACT_APP_WEATHER_API_KEY}`;
 const PATH_BASE = 'https://api.openweathermap.org/data/2.5/weather';
 
@@ -147,7 +145,7 @@ class App extends Component {
     isCelcius ? 'Celcius' : 'Fahrenheit';
 
   render() {
-    if (!this.state.promiseIsResolved) { return null }
+    if (!this.state.promiseIsResolved) { return (<ThemeProvider><div><div className="infopanel"><h1>Waiting for location</h1>Accept location request and wait for response</div></div></ThemeProvider>) }
     console.log('Rendering');
     const { currentLatLng, weather, isCelcius } = this.state;
 
