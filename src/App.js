@@ -9,7 +9,7 @@ import { ThemeProvider } from '@zendeskgarden/react-theming';
 import { RangeField, Hint, Range, Message } from '@zendeskgarden/react-ranges';
 import { Toggle, Label } from '@zendeskgarden/react-toggles';
 
-import ReactGA from 'react-ga';
+
 
 
 const APPID = `${process.env.REACT_APP_WEATHER_API_KEY}`;
@@ -75,7 +75,6 @@ class App extends Component {
 
   componentDidMount() {
     this.getGeoLocation();
-    this.initializeReactGA();
   }
 
 
@@ -91,10 +90,6 @@ class App extends Component {
     this.delayedShowMarker()
   }
 
-  initializeReactGA() {
-    ReactGA.initialize('UA-127138556-1');
-    ReactGA.pageview('/main');
-  }
 
   getGeoLocation = () => {
     if (navigator.geolocation) {
@@ -161,10 +156,10 @@ class App extends Component {
             />
           </div>
           <div className="infopanel">
-
+            <span className="faded">Closest weather station:</span>
             <h1>{weather.name} {(weather.main.temp - 273.15).toFixed(2)}º<b>{isCelcius ? ('C') : ('F')}</b><img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`} /> </h1>
-            <span>Lat:{currentLatLng.lat.toFixed(4)}</span>
-            <span>Lat:{currentLatLng.lng.toFixed(4)}</span><br />
+            <span>Lat:{currentLatLng.lat.toFixed(4)} </span>
+            <span>Lng:{currentLatLng.lng.toFixed(4)}</span><br />
             <h3>
             {weather.weather[0].description} Wind: {weather.wind.speed}m/s</h3>
             <div className="hidden"><Toggle checked={this.state.isCelcius} onChange={event => this.setState({ isCelcius: event.target.checked })}>
