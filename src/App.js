@@ -157,7 +157,7 @@ class App extends Component {
           </div>
           <div className="infopanel">
             <span className="faded">Closest weather station:</span>
-            <h1>{weather.name} {(weather.main.temp - 273.15).toFixed(2)}º<b>{isCelcius ? ('C') : ('F')}</b><img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`} /> </h1>
+            <h1 className="red">{weather.name} {(weather.main.temp - 273.15).toFixed(2)}º<b>{isCelcius ? ('C') : ('F')}</b><img src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`} /> </h1>
             <span>Lat:{currentLatLng.lat.toFixed(4)} </span>
             <span>Lng:{currentLatLng.lng.toFixed(4)}</span><br />
             <h3>
